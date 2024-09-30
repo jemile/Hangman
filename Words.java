@@ -21,6 +21,7 @@ public class Words
 		try
 		{
 			String fileUrl = "https://pastebin.com/raw/jTWsUbsK";
+			@SuppressWarnings("deprecation")
 			URL url = new URL(fileUrl);
 			try (InputStream is = url.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is)))
 			{

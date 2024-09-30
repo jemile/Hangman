@@ -23,6 +23,7 @@ public class Frame extends JFrame {
 	JPanel panel;
 	
 	boolean checkGuess;
+	private int winCount;
 	
 	private static final long serialVersionUID = 6440790967486081245L;
 	
@@ -43,7 +44,7 @@ public class Frame extends JFrame {
 		JLabel wins = new JLabel();
 		wins.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		wins.setAlignmentY(JFrame.BOTTOM_ALIGNMENT);
-		wins.setText("wins:" + Integer.toString(hangman.getWins()));
+		wins.setText("wins: " + winCount);
 		
 		return wins;
 	}
@@ -68,16 +69,18 @@ public class Frame extends JFrame {
 	
 	public JPanel printWord()
 	{
+		clearPanel();
         if (panel == null) {
 			panel = new JPanel();
 			panel.setBounds(30, 10, 400, 75);
-			panel.setBackground(Color.lightGray);
+			panel.setBackground(new Color(102, 148, 173));
         }
 		
 		JLabel word = wordToLabel();
+		JLabel wins = winDisplay();
         panel.removeAll(); // Clear the old label
 		panel.add(word);
-		panel.add(winDisplay());
+		panel.add(wins);
 	    panel.revalidate();
 	    panel.repaint();
 		
@@ -96,18 +99,22 @@ public class Frame extends JFrame {
 	public void createGame()
 	{
 		String guess = JOptionPane.showInputDialog("Guess:");
+		
+		if (guess.equals("admin101"))
+			System.out.println(hangman.returnWord());
+	
 		if (guess == null || guess.isEmpty() || guess.length() > chosenWord.length()) {
 	        JOptionPane.showMessageDialog(panel, "Please enter a valid item.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+			
 		checkGuess = hangman.checkGuess(guess);
 		clearPanel();
 		this.add(printWord());
 		
 		if (checkGuess)
 		{
-			hangman.setWins(hangman.getWins() + 1);
+			winCount++;
 	        startGame();
 		} 
 	}
@@ -119,14 +126,13 @@ public class Frame extends JFrame {
 		this.setResizable(false);	
 		this.setSize(width, height);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.getContentPane().setBackground(new Color(20, 50, 150));
+		this.getContentPane().setBackground(new Color(135, 184, 212));
 		
 		ImageIcon icon = new ImageIcon("calc.png");
 		this.setIconImage(icon.getImage());
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(50, 10, 470, 75);
-		panel.setBackground(new Color(25, 75, 150, 180));
 		panel.setVisible(true);
 		
 		startGame();
@@ -134,7 +140,8 @@ public class Frame extends JFrame {
 		JButton makeGuess = new JButton();
 		makeGuess.setVisible(true);
 		makeGuess.setFocusPainted(false);
-		makeGuess.setBounds(240, 110, 250, 125);
+		makeGuess.setBounds(230, 110, 245, 125);
+		makeGuess.setBackground(new Color(102, 148, 173));
 		makeGuess.setText("Take Guess");
 		makeGuess.addActionListener(e -> createGame());
 				

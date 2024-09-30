@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Hangman {
 	private String input;
-	private int winCount;
 	private ArrayList<Character> words = new ArrayList<>();
+	private boolean removePart = false;
 	
 	Hangman(String input, int stringSize)
 	{
@@ -23,9 +23,32 @@ public class Hangman {
 		return words.get(index).toString();
 	}
 	
+	public String returnWord()
+	{
+		return input;
+	}
+	
+	public void checker(boolean check)
+	{
+		if (!check)
+		{
+			removePart = Boolean.TRUE;
+		}
+	}
+	
+	public Boolean getChecker()
+	{
+		return removePart;
+	}
+	
+	public void setChecker()
+	{
+		removePart = Boolean.FALSE;
+	}
+	
 	public boolean checkGuess(String guess)
 	{
-		boolean ifWon = false;
+		ArrayList<Character> newWords = words;
 		
 		for (int i = 0; i < guess.length(); i++)
 		{
@@ -36,22 +59,22 @@ public class Hangman {
 			}
 		}
 		
+		if (words.equals(newWords))
+			checker(false);
+		else
+			checker(true);
+		
 		if (!words.contains('_'))
 		{
-			ifWon = true;
+			return true;
 		}
 		
-		return ifWon;	
-	}
-	
-	public int getWins()
-	{
-		return winCount;
-	}
-	
-	public void setWins(int wins)
-	{
-		winCount = wins;
+		if (words.equals(newWords))
+			checker(false);
+		else
+			checker(true);
+		
+		return false;	
 	}
 	
 	public int getWordSize()
